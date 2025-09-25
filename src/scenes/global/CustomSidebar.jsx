@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Sidebar, Menu, MenuItem } from "react-pro-sidebar";
+import { Sidebar, Menu, MenuItem, ProSidebarProvider } from "react-pro-sidebar";
 import { Box, IconButton, Typography, useTheme } from "@mui/material";
 import { Link } from "react-router-dom";
 import { tokens } from "../../theme";
@@ -22,23 +22,30 @@ const Item = ({ title, to, icon, selected, setSelected }) => {
   return (
     <MenuItem
       active={selected === title}
-      style={{
-        color: colors.grey[100],
-      }}
       onClick={() => setSelected(title)}
       icon={icon}
-      component={<Link to={to} />}
+      sx={{
+        color: colors.grey[100],
+        "&.ps-active": {
+          color: "#6870fa",
+        },
+        "&:hover": {
+          backgroundColor: colors.primary[500],
+        },
+      }}
     >
-      <Typography>{title}</Typography>
+      <Link to={to} style={{ color: "inherit", textDecoration: "none" }}>
+        <Typography>{title}</Typography>
+      </Link>
     </MenuItem>
   );
 };
 
 const CustomSidebar = () => {
-  const theme = useTheme();
-  const colors = tokens(theme.palette.mode);
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [selected, setSelected] = useState("Dashboard");
+  const theme = useTheme();
+  const colors = tokens(theme.palette.mode);
 
   return (
     <Box
@@ -52,9 +59,6 @@ const CustomSidebar = () => {
         "& .ps-menu-button:hover": {
           color: "#868dfb !important",
         },
-        "& .ps-active": {
-          color: "#6870fa !important",
-        },
       }}
     >
       <Sidebar collapsed={isCollapsed}>
@@ -63,7 +67,7 @@ const CustomSidebar = () => {
           <MenuItem
             onClick={() => setIsCollapsed(!isCollapsed)}
             icon={isCollapsed ? <MenuOutlinedIcon /> : undefined}
-            style={{
+            sx={{
               margin: "10px 0 20px 0",
               color: colors.grey[100],
             }}
