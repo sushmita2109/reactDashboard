@@ -1,6 +1,5 @@
 import { useState } from "react";
-import { ProSidebar, Menu, MenuItem } from "react-pro-sidebar";
-import "react-pro-sidebar/dist/css/styles.css";
+import { Sidebar, Menu, MenuItem } from "react-pro-sidebar";
 import { Box, IconButton, Typography, useTheme } from "@mui/material";
 import { Link } from "react-router-dom";
 import { tokens } from "../../theme";
@@ -28,41 +27,39 @@ const Item = ({ title, to, icon, selected, setSelected }) => {
       }}
       onClick={() => setSelected(title)}
       icon={icon}
+      component={<Link to={to} />}
     >
       <Typography>{title}</Typography>
-      <Link to={to} />
     </MenuItem>
   );
 };
 
-const Sidebar = () => {
+const CustomSidebar = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [selected, setSelected] = useState("Dashboard");
+
   return (
     <Box
       sx={{
-        "& .pro-sidebar-inner": {
+        "& .ps-sidebar-container": {
           background: `${colors.primary[400]} !important`,
         },
-        "& .pro-icon-wrapper": {
-          backgroundColor: "transparent !important",
+        "& .ps-menu-button": {
+          color: `${colors.grey[100]} !important`,
         },
-        "& .pro-inner-item": {
-          padding: "5px 35px 5px 20px !important",
-        },
-        "& .pro-inner-item:hover": {
+        "& .ps-menu-button:hover": {
           color: "#868dfb !important",
         },
-        "& .pro-menu-item.active": {
+        "& .ps-active": {
           color: "#6870fa !important",
         },
       }}
     >
-      <ProSidebar collapsed={isCollapsed}>
+      <Sidebar collapsed={isCollapsed}>
         <Menu iconShape="square">
-          {/* LOGO AND MENU ICON */}
+          {/* Toggle Button */}
           <MenuItem
             onClick={() => setIsCollapsed(!isCollapsed)}
             icon={isCollapsed ? <MenuOutlinedIcon /> : undefined}
@@ -88,6 +85,7 @@ const Sidebar = () => {
             )}
           </MenuItem>
 
+          {/* Profile Section */}
           {!isCollapsed && (
             <Box mb="25px">
               <Box display="flex" justifyContent="center" alignItems="center">
@@ -115,6 +113,7 @@ const Sidebar = () => {
             </Box>
           )}
 
+          {/* Menu Items */}
           <Box paddingLeft={isCollapsed ? undefined : "10%"}>
             <Item
               title="Dashboard"
@@ -219,9 +218,9 @@ const Sidebar = () => {
             />
           </Box>
         </Menu>
-      </ProSidebar>
+      </Sidebar>
     </Box>
   );
 };
 
-export default Sidebar;
+export default CustomSidebar;
